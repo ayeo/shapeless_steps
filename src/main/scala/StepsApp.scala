@@ -13,7 +13,6 @@ object StepsApp extends App {
   case class NameAndAgeAndAnimal(name: String, age: Int, animal: Boolean) extends Subject
 
   object Mapper {
-
     def from(s: Subject): Serializable :: Any :: Any :: HNil = s match {
       case na: NameAndAnimal => na.name :: Empty :: na.animal :: HNil
       case na: NameAndAge => na.name :: na.age :: Empty :: HNil
@@ -29,18 +28,14 @@ object StepsApp extends App {
     }
   }
 
-  private val data1: NameAndAge = NameAndAge("Adam Mickiewicz", 42)
-  private val data2: NameAndAnimal = NameAndAnimal("Bolesław Prus", animal = true)
-  private val data3: NameAndAgeAndAnimal = NameAndAgeAndAnimal("Maria Konopnicka", 24, animal = false)
-  private val data4: AgeAndAnimal = AgeAndAnimal(58, animal = true)
+  def prove(s: Subject): Unit = println(Mapper.to(Mapper.from(s)))
 
-  println(Mapper.from(data1))
-  println(Mapper.from(data2))
-  println(Mapper.from(data3))
-  println(Mapper.from(data4))
+  val data = List(
+    NameAndAge("Adam Mickiewicz", 42),
+    NameAndAnimal("Bolesław Prus", animal = true),
+    NameAndAgeAndAnimal("Maria Konopnicka", 24, animal = false),
+    AgeAndAnimal(58, animal = true)
+  )
 
-  println(Mapper.to(Mapper.from(data1)))
-  println(Mapper.to(Mapper.from(data2)))
-  println(Mapper.to(Mapper.from(data3)))
-  println(Mapper.to(Mapper.from(data4)))
+  data.foreach(prove)
 }
